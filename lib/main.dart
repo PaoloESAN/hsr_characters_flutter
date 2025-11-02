@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hsr_characters_flutter/screens/detalles.dart';
 import 'package:hsr_characters_flutter/screens/home.dart';
+import 'package:hsr_characters_flutter/services/hsrApi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +19,14 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Inter',
       ),
+      routes: {
+        '/home': (context) => const MyHomePage(title: 'Home'),
+        '/detalles': (context) {
+          final character =
+              ModalRoute.of(context)!.settings.arguments as Character;
+          return DetallesScreen(character: character);
+        },
+      },
       home: const MyHomePage(title: 'Home'),
     );
   }

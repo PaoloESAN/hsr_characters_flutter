@@ -1,109 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hsr_characters_flutter/services/hsrApi.dart';
 
 class Tarjeta extends StatelessWidget {
-  final String nombre;
-  final int estrellas;
-  const Tarjeta({super.key, required this.nombre, required this.estrellas});
+  final Character character;
+  const Tarjeta({super.key, required this.character});
+
+  void irDetalles(BuildContext context) {
+    Navigator.pushNamed(context, '/detalles', arguments: character);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-          margin: EdgeInsets.all(10.0),
-          elevation: 0,
-          color: Theme.of(context).colorScheme.primaryContainer,
-          shape: RoundedRectangleBorder(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+        ),
+        child: GestureDetector(
+          onTap: () => irDetalles(context),
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
-          ),
-          child: Stack(
-            children: [
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/mafuyu.jpg'),
-                    /*image: NetworkImage(
-                      'https://preview.redd.it/mafuyu-card-v0-to0w5nus26he1.jpeg?auto=webp&s=b7bb0253387f61bf03aac4297d3435e68da2906d',
-                    ),*/
+            child: Stack(
+              children: [
+                Container(
+                  height: 240,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: character.imageUrl,
                     fit: BoxFit.cover,
+                    width: double.infinity,
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Center(child: Icon(Icons.error)),
                   ),
                 ),
-              ),
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.3),
-                      Colors.black.withValues(alpha: 0.6),
-                    ],
-                    stops: const [0.0, 0.7, 1.0],
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 10,
-                left: 10,
-                right: 10,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      nombre,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Colors.black.withValues(alpha: 0.7),
-                          ),
-                        ],
-                      ),
+                Container(
+                  height: 240,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: 0.4),
+                        Colors.black.withValues(alpha: 0.8),
+                      ],
+                      stops: const [0.0, 0.6, 1.0],
                     ),
-                    Container(
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          ...List.generate(estrellas, (idx) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: /*Image.asset(
-                                'assets/icons/star.png',
-                                width: 24,
-                                height: 24,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )*/ Icon(
-                                Icons.star_rate,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                size: 20,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                character.name,
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            );
-                          }),
-                        ],
-                      ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 6.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    character.rarity.toString(),
+                                    style: TextStyle(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimary,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Icon(
+                                    Icons.star_rate_rounded,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

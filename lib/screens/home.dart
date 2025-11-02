@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hsr_characters_flutter/services/hsrApi.dart';
 import 'package:hsr_characters_flutter/widgets/tarjeta.dart';
 
 class Home extends StatefulWidget {
@@ -9,15 +10,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Future<List<Character>> _futureCharacters;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureCharacters = CallApi().fetchCharacters();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Tarjeta(nombre: "mafuyu1", estrellas: 5),
-        Tarjeta(nombre: "mafuyu2", estrellas: 4),
-        Tarjeta(nombre: "mafuyu3", estrellas: 3),
-        Tarjeta(nombre: "mafuyu4", estrellas: 2),
-      ],
+    return FutureBuilder<List<Character>>(
+      future: _futureCharacters,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No characters found.'));
+        }
+
+        final characters = snapshot.data!;
+        return ListView.builder(
+          itemCount: characters.length - 2,
+          itemBuilder: (context, index) {
+            return Tarjeta(character: characters[index + 2]);
+          },
+        );
+      },
     );
   }
 }
