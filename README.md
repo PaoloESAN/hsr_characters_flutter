@@ -1,16 +1,28 @@
-# hsr_characters_flutter
+# HSR CHARACTERS FLUTTER
 
-A new Flutter project.
+Un proyecto experimental para comparar y aprender diferentes frameworks de desarrollo mobile.
 
-## Getting Started
+## Objetivo
 
-This project is a starting point for a Flutter application.
+Este proyecto busca implementar la misma aplicación en tres frameworks diferentes:
+- **Flutter** (en progreso)
+- **React Native** (próximamente)
+- **Jetpack Compose** (próximamente)
 
-A few resources to get you started if this is your first Flutter project:
+## Estado Actual
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Por el momento, solo se tiene implementada una pequeña parte del proyecto en **Flutter**. La aplicación muestra una lista de personajes del juego Honkai: Star Rail.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Características implementadas en Flutter:
+- Pantalla principal con lista de personajes
+- Tarjetas de personajes con imagen, nombre y rating
+- Barra de navegación inferior
+- Diseño Material 3
+- Tipografía Inter
+
+## 🛠️ Tecnologías
+
+### Flutter
+- Material 3
+- Assets locales
+- Fuentes personalizadas
