@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:hsr_characters_flutter/screens/detalles.dart';
 import 'package:hsr_characters_flutter/screens/home.dart';
 import 'package:hsr_characters_flutter/services/hsrApi.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {

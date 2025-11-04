@@ -32,10 +32,17 @@ class _HomeState extends State<Home> {
         }
 
         final characters = snapshot.data!;
-        return ListView.builder(
-          itemCount: characters.length - 2,
+        return GridView.builder(
+          padding: const EdgeInsets.all(16.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 16.0,
+            mainAxisSpacing: 16.0,
+          ),
+          itemCount: characters.length,
           itemBuilder: (context, index) {
-            return Tarjeta(character: characters[index + 2]);
+            return Tarjeta(character: characters[index]);
           },
         );
       },
